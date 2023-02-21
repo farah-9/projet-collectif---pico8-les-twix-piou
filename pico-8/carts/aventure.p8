@@ -27,7 +27,7 @@ function check_flag(flag,x,y)
 	return	fget(sprite,flag)
 end
 
-function upadate_camera()
+function update_camera()
 	local camx=flr(p.x/16)*16
 	local camy=flr(p.y/16)*16
 	camera(camx*8,camy*8)
@@ -47,13 +47,10 @@ function player_movement()
 	if (btnp(⬇️)) newy+=1
 	if (btnp(⬆️)) newy-=1
 	if (btnp(❎))	attack()
-	end
 	
 	if not check_flag(0,newx,newy) then
 		p.x=newx
 		p.y=newy
-		--p.x=mid(0,newx,127)
-		--p.x=mid(0,newy,63)
 	end
 end
 
