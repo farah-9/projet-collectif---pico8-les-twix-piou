@@ -11,6 +11,7 @@ function _update60()
 	if allow_player_movement() then
 		player_movement()
 	end
+	interact_with_dialog()
 	update_camera()
 end
 
@@ -135,17 +136,24 @@ end
 --dialogues
 current_dialog = {}
 did_start_dialog_1 = false
+did_start_dialog_2 = false
 
 function show_dialog_if_needed()
-	if p.item == 0 and p.x == 3 and p.y == 4 and p.ox == 0 and p.oy == 0 and not did_start_dialog_1 then
-		current_dialog = create_dialog_1()
-		did_start_dialog_1 = true
- end
- if btnp(❎) then 
+  if p.item == 0 and p.x == 3 and p.y == 4 and p.ox == 0 and p.oy == 0 and not did_start_dialog_1 then
+    current_dialog = create_dialog_1()
+    did_start_dialog_1 = true
+  end
+  if newx==11 and newy==5 and not did_start_dialog_2 then
+    current_dialog = create_dialog_2()
+    did_start_dialog_2 = true
+  end
+end
+
+function interact_with_dialog()
+ if btnp(❎) and count(current_dialog) > 0 then 
   deli(current_dialog, 1)
  end
 end
-
 
 function create_dialog_1()
 	return {
@@ -153,6 +161,18 @@ function create_dialog_1()
   {name = "attention", message="trouve un objet qui te donnera \ndu courage !"}
 	}
 end
+
+function create_dialog_2()
+	return {
+		{name = "poussin", message="vache, j'ai besoin de toi !"},
+		{name = "poussin", message="je pars me venger du \nvilain fermier !"},
+		{name = "poussin", message="il a mange mes parents..."},
+		{name = "poussin", message="vache.. prete-moi ta force!"},
+		{name = "vache", message = "oh, poussin... bien sur, je \nte donne ma force!"},
+		{name = "vache", message = "je te donne aussi un peu \nde ma vitalite, pour que \ntu puisses le vaincre !"},
+		{name = "vache", message = "bonne chance !"}	
+	}
+end	
 
 function draw_dialog_box(x, y, name, message)
  rectfill(x + 3, y - 8, x + 41, y-1, 2)
