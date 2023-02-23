@@ -4,6 +4,7 @@ __lua__
 function _init()
 	create_player()
 	damage={}
+enemies={}
 end
 
 function _update60()
@@ -66,6 +67,8 @@ function create_player()
 		keys=0,
 		item=0
 	}
+
+	
 end
 
 function player_movement()
@@ -92,6 +95,7 @@ function player_movement()
   	attack()
   end
  end
+	if (btnp(❎))	attack(enemies)
 	
 	if (newx!=p.x or newy!=p.y) and
 	not check_flag(0,newx,newy) then
@@ -136,7 +140,45 @@ function allow_player_movement()
 end
 -->8
 --attack
+function attack()
 
+	if check_flag(1,p.x+1,p.y) then
+	--	local sprite=mget(x,y)
+	mset(p.x+1,p.y,4)
+	
+	elseif check_flag(1,p.x-1,p.y) then
+		mset(p.x-1,p.y,4)
+		
+	elseif	check_flag(1,p.x,p.y-1) then
+		mset(p.x,p.y-1,4)
+	end
+end
+	
+function attack2()
+--verifier si le joueur clique sur un ennemi
+  local ox = stat(32)
+  local oy = stat(33)
+  for e in all(enemies) do
+    print(e)
+    if e.active and ox >= e.x and ox <= e.x + e.width and oy >= e.y and oy <= e.y + e.height then
+      -- calculer les degats de l'attaque
+      local damage = p.attack - e.defense
+      if damage > 0 then
+        e.hp = e.hp - damage
+        if e.hp <= 0 then
+          e.active = false
+          p.score = p.score + e.score
+ 									
+        end
+      end
+      -- sortir de la boucle pour n'attaquer qu'un seul ennemi れき la fois
+      
+    end
+  end
+	end
+
+
+--x:11 y:5 coordonne vache
 -->8
 --dialogues
 current_dialog = {}
