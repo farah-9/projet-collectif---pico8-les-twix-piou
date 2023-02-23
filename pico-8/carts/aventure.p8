@@ -134,31 +134,44 @@ end
 -->8
 --dialogues
 current_dialog = {}
-did_start_dialog_1 = false
+
 
 function show_dialog_if_needed()
-	if p.item == 0 and p.x == 3 and p.y == 4 and p.ox == 0 and p.oy == 0 and not did_start_dialog_1 then
-		current_dialog = create_dialog_1()
-		did_start_dialog_1 = true
- end
- if btnp(❎) then 
+  if p.item == 0 and p.x == 3 and p.y == 4 and p.ox == 0 and p.oy == 0 then
+    current_dialog = dialog_1
+  end
+  if newx==11 and newy==5 then
+    current_dialog = dialog_2
+  end
+end
+
+function interact_with_dialog()
+ if btnp(❎) and count(current_dialog) > 0 then 
   deli(current_dialog, 1)
  end
 end
 
-
-function create_dialog_1()
-	return {
-  {name = "attention", message="ta peur t'empeche de traverser \nle pont!"},
-  {name = "attention", message="trouve un objet qui te donnera \ndu courage !"}
+dialog_1 = {
+  {message="ta peur t'empeche de traverser \nle pont!"},
+  {message="trouve un objet qui te donnera \ndu courage !"}
 	}
-end
+dialog_2 = {
+		{name = "poussin", message="vache, j'ai besoin de toi !"},
+		{name = "poussin", message="je pars me venger du \nvilain fermier !"},
+		{name = "poussin", message="il a mange mes parents..."},
+		{name = "poussin", message="vache.. prete-moi ta force!"},
+		{name = "vache", message = "oh, poussin... bien sur, je \nte donne ma force!"},
+		{name = "vache", message = "je te donne aussi un peu \nde ma vitalite !"},
+		{name = "vache", message = "bonne chance !"}	
+	}	
 
 function draw_dialog_box(x, y, name, message)
- rectfill(x + 3, y - 8, x + 41, y-1, 2)
-	print(name, x + 5, y - 6, 15)
+	if name then
+	 rectfill(x + 2, y - 8, x + #name * 4 + 6, y-1, 2)
+		print(name, x + 5, y - 6, 15)
+	end 
 	rectfill(x, y, x+124, y+20, 2)
- rectfill(x + 1, y + 1, x+123, y+19, 4)
+	rectfill(x + 1, y + 1, x+123, y+19, 4)
  print(message, x+3, y+3, 0)
 end
 __gfx__
