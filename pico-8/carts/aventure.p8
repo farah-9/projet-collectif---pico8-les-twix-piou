@@ -132,19 +132,8 @@ end
 --attack
 
 function attack()
-	local pos = {}
-	pos[1] = {x=1,y=0}
-	pos[2] = {x=-1,y=0}
-	pos[3] = {x=0,y=1}
-	pos[4] = {x=0,y=-1}
-	for newpos in all(pos)do
-		
-		--if check_flag(1,p.x+newpos.x,p.y+newpos.y) then
-	 	--sfx(0)
-  --end
-	end
+	
 end
-
 --x:11 y:5 coordonne vache
 -->8
 --dialogues
