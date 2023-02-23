@@ -11,6 +11,7 @@ function _update60()
 	if allow_player_movement() then
 		player_movement()
 	end
+	interact_with_dialog()
 	update_camera()
 end
 
