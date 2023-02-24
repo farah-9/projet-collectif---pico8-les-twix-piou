@@ -84,18 +84,18 @@ function player_movement()
 	if p.anim_t == 0 then
   newox = 0
   newoy = 0
-  if btn(⬅️) then
+  if btnp(⬅️) then
    newx -= 1
    newox = 8
    p.flip=true
-  elseif btn(➡️) then
+  elseif btnp(➡️) then
    newx += 1
    newox = -8
    p.flip=false
-  elseif btn(⬆️) then
+  elseif btnp(⬆️) then
    newy -= 1
    newoy = 8
-  elseif btn(⬇️) then
+  elseif btnp(⬇️) then
    newy += 1
    newoy = -8
   elseif btnp(❎)	then
@@ -163,30 +163,6 @@ function attack()
 	end
 end
 	
-function attack2()
---verifier si le joueur clique sur un ennemi
-  local ox = stat(32)
-  local oy = stat(33)
-  for e in all(enemies) do
-    print(e)
-    if e.active and ox >= e.x and ox <= e.x + e.width and oy >= e.y and oy <= e.y + e.height then
-      -- calculer les degats de l'attaque
-      local damage = p.attack - e.defense
-      if damage > 0 then
-        e.hp = e.hp - damage
-        if e.hp <= 0 then
-          e.active = false
-          p.score = p.score + e.score
- 									
-        end
-      end
-      -- sortir de la boucle pour n'attaquer qu'un seul ennemi れき la fois
-      
-    end
-  end
-	end
-
-
 --x:11 y:5 coordonne vache
 -->8
 --dialogues
@@ -198,7 +174,6 @@ function show_dialog_if_needed()
    current_dialog = dialog_1
   end
   if newx==11 and newy==5 and count(dialog_2.messages) > 0 then
-    music(-1,500)
     current_dialog = dialog_2
     p.keys = 1
   end
