@@ -65,7 +65,7 @@ end
 
 function create_player()
 	p={
-		x=23,y=13,
+		x=5,y=2,
 		ox=0,oy=0,
 		start_ox=0,start_oy=0,
 		anim_t=0,
