@@ -30,10 +30,13 @@ function _draw()
 end
 -->8
 --map
+
+--affichage map
 function draw_map()
 	map(0,0,0,0,128,64)	
 end
 
+--verification des flags
 function check_flag(flag,x,y)
 	local sprite=mget(x,y)
 	return	fget(sprite,flag)
@@ -84,18 +87,18 @@ function player_movement()
 	if p.anim_t == 0 then
   newox = 0
   newoy = 0
-  if btnp(⬅️) then
+  if btn(⬅️) then
    newx -= 1
    newox = 8
    p.flip=true
-  elseif btnp(➡️) then
+  elseif btn(➡️) then
    newx += 1
    newox = -8
    p.flip=false
-  elseif btnp(⬆️) then
+  elseif btn(⬆️) then
    newy -= 1
    newoy = 8
-  elseif btnp(⬇️) then
+  elseif btn(⬇️) then
    newy += 1
    newoy = -8
   elseif btnp(❎)	then
@@ -135,7 +138,7 @@ function check_item(x,y)
 	if check_flag(7,x,y) then
 		pick_up_item(x,y)
 	elseif check_flag(2,newx,newy) and p.item>0  then
-		open_bridge(newx,newy)
+		next_item(newx,newy)
 	elseif check_flag(3,newx,newy) and p.keys > 0 then
 		open_labyrinthe(newx,newy)
 	end
