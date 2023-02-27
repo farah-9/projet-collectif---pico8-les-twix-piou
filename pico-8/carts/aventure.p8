@@ -16,12 +16,14 @@ function _update60()
 	interact_with_dialog()
 	update_camera()
 	define_player_state()
+	f.anim_t += 1
 end
 
 function _draw()
 	cls()
  draw_map()
  draw_player()
+ anim_enemies()
  camera()
  if current_dialog.messages and current_dialog.messages[1] then
  	draw_dialog_box(2, 96, current_dialog.messages[1].name, current_dialog.messages[1].message)
@@ -83,7 +85,9 @@ function create_player()
 		x=4,y=27,
 		hp=20,
 		max_hp=20,
-		sprite=14
+		sprite=14,
+		anim_t=0,
+		is_attacking=false
 	}
 	
 	t={
@@ -180,7 +184,7 @@ function check_item(x,y)
 		pick_up_item(x,y)
 	elseif check_flag(2,newx,newy) and p.item>0  then
 		next_item(newx,newy)
-	elseif check_flag(3,newx,newy) and p.keys==3 then
+	elseif check_flag(3,newx,newy) and p.keys==1 then
 		open_labyrinthe(newx,newy)
 	end
 end
@@ -200,6 +204,7 @@ function define_player_state()
  	p.is_moving = false
  end
 end
+
 -->8
 --attack
 function attack()
@@ -233,6 +238,23 @@ function attack()
 		music(44)
 	end
 end
+
+function anim_enemies()
+	if f.is_attacking == true then
+		if f.anim_t % 48 <=12 then
+	 	spr(14,f.x*8,f.y*8,2,2)
+		elseif f.anim_t % 48 <= 24 then
+			spr(12,f.x*8,f.y*8,2,2)
+		elseif f.anim_t % 48 <=36 then
+			spr(65,f.x*8,f.y*8,2,2)
+ 	else
+			spr(10,f.x*8,f.y*8,2,2)
+		end
+	else 
+	 spr(14,f.x*8,f.y*8,2,2)
+	end
+end
+
 --x:11 y:5 coordonne vache
 -->8
 --dialogues
@@ -248,6 +270,15 @@ function show_dialog_if_needed()
   if newx==11 and newy==5 and count(dialog_2.messages) > 0 then
     current_dialog = dialog_2
     p.keys = 1
+  end
+ -- if newx==0 and newy==0 and count(dialog_3.messages) > 0 then
+  	--current_dialog = dialog_3
+ -- end
+ -- if newx==0 and newy==0 and count(dialog_4.messages) > 0 then
+  --	current_dialog = dialog_4
+  --end
+  if newx==4 and newy==27 and count(dialog_5.messages) > 0 then
+  	current_dialog = dialog_5
   end
 end
 
@@ -271,6 +302,10 @@ function interact_with_dialog()
   p.max_hp += 2 
   p.hp += 2
  end
+ 
+ if current_dialog.id == 5 and current_dialog.messages and count(current_dialog.messages) == 0 then
+			f.is_attacking = true 
+ end 
  
  -- si le dialogue est fini,
  -- ecrase les donnees du dialogue
@@ -299,6 +334,35 @@ dialog_2 = {
 		{name = "vache", message = "bonne chance !"}	
 	}	
 }
+dialog_3 = {
+	id=3,
+	messages = {
+		{name = "poussin", message="tortue, j'ai besoin de toi !"},
+		{name = "tortue", message="quoi ? tu veux te venger du fermier ?"},
+		{name = "tortue", message="ne compte pas sur moi pour t'aider."},
+		{name = "tortue", message="battons-nous ! si tu gagnes, je te donne ma defense !"}
+	}
+}
+dialog_4 = {
+	id=4,
+	messages = {
+		{name = "poussin", message="grenouille, j'ai besoin de toi !"},
+		{name = "grenouille", message="quoi ? tu veux te venger du fermier ?"},
+		{name = "grenouille", message="il va falloir me passer sur le corps !"},
+		{name = "grenouille", message="si tu gagnes, je te donne ma vitesse !"}
+	}
+}
+dialog_5 = {
+	id=5,
+	messages = {
+		{name = "poussin", message="vilain fermier ! \nmoi et mes ami-es allons te \nvaincre !"},
+		{name = "vilain fermier", message="hahahaa ! \nvous osez vous rebellez ?"},
+		{name = "vilain fermier", message="pourquoi ? parce que j'ai \nmange tes parents poussin ?"},
+		{name = "poussin", message="ne parle pas de mes parents !"}
+	}
+}
+
+
 
 -- dessine la boite de dialogue
 function draw_dialog_box(x, y, name, message)
