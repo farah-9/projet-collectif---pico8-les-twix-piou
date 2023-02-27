@@ -15,6 +15,7 @@ function _update60()
 	end
 	interact_with_dialog()
 	update_camera()
+	define_player_state()
 end
 
 function _draw()
@@ -30,30 +31,31 @@ function _draw()
 end
 -->8
 --map
+--coordonnees + taille de map
 function draw_map()
 	map(0,0,0,0,128,64)	
 end
 
+-- verification des flags
 function check_flag(flag,x,y)
 	local sprite=mget(x,y)
 	return	fget(sprite,flag)
 end
 
+-- 
 function update_camera()
 	local camx=flr(p.x/16)*16
 	local camy=flr(p.y/16)*16
 	camera(camx*8,camy*8)
 end
 
+-- switch sur le sprite avec item
 function next_item(x,y)
 	local sprite=mget(x,y)
 	mset(x,y,sprite+1)
 end
 
-function open_bridge(x,y)
-	next_item(x,y)
-end
-
+-- ouvre le labyrinthe 
 function open_labyrinthe(x,y)
 	local paille=mget(x,y)
 	mset(x,y,42)
@@ -72,7 +74,9 @@ function create_player()
 		armor=0,
 		sprite=17,
 		keys=0,
-		item=0
+		item=0,
+		is_moving=true,
+		moving_anim_t=0
 	}
 
 	
@@ -119,10 +123,32 @@ function player_movement()
 end
 
 function draw_player()
-	spr(p.sprite,p.x*8+p.ox,p.y*8+p.oy,1,1,p.flip)
+ -- les caracteristiques du sprite
+ local x, y, pflip = p.x*8+p.ox, p.y*8+p.oy, p.flip
+	-- si perso a un item et bouge
 	if(p.item == 1) then
-		spr(18,p.x*8+p.ox,p.y*8+p.oy,1,1,p.flip)
-	end	
+		if p.is_moving == true then
+	 	if	p.moving_anim_t % 8 <= 3 then
+	 		spr(18, x, y, 1, 1, pflip)
+	 	else 
+	 		spr(2, x, y, 1, 1, pflip)	
+	 	end
+	 else
+	 	spr(18, x, y, 1, 1, pflip) 
+		end
+	else
+-- si perso n'a pas d'item et bouge
+		if p.is_moving == true then
+			if p.moving_anim_t % 8 <= 3 then
+				spr(17, x, y, 1, 1, pflip)
+			else
+				spr(1, x, y, 1, 1, pflip)
+			end		
+		else
+		-- si perso ne bouge pas
+			 spr(1, x, y, 1, 1, pflip)
+		end
+	end
 end
 
 function pick_up_item(x,y)
@@ -135,14 +161,26 @@ function check_item(x,y)
 	if check_flag(7,x,y) then
 		pick_up_item(x,y)
 	elseif check_flag(2,newx,newy) and p.item>0  then
-		open_bridge(newx,newy)
+		next_item(newx,newy)
 	elseif check_flag(3,newx,newy) and p.keys > 0 then
 		open_labyrinthe(newx,newy)
 	end
 end
 
+-- empeche le perso de bouger
+-- durant un dialogue
 function allow_player_movement()
 	return current_dialog.messages == nil or count(current_dialog.messages) == 0
+end
+
+--determine si le joueur bouge
+function define_player_state()
+	p.moving_anim_t += 1
+ if btn(⬆️) or btn(⬇️) or btn(⬅️) or btn(➡️) then
+ 	p.is_moving = true
+ else
+ 	p.is_moving = false
+ end
 end
 -->8
 --attack
@@ -192,7 +230,8 @@ function attack2()
 --dialogues
 current_dialog = {}
 
-
+-- determine quand afficher les
+-- dialogues
 function show_dialog_if_needed()
   if newx==3 and newy==5 and p.item == 0 and count(dialog_1.messages) > 0 then
    current_dialog = dialog_1
@@ -205,29 +244,29 @@ function show_dialog_if_needed()
 end
 
 function interact_with_dialog()
-	-- if ❎ is pressed and the
-	-- current dialog is displaying
-	-- a message, then remove that
-	-- message to reveal the next
-	-- one
+	-- si on appuie sur ❎ et que 
+	-- le dialogue est en court,
+	-- on retire le message
+	-- pour afficher le suivant
 	if btnp(❎) and current_dialog.messages and count(current_dialog.messages) > 0 then 
   deli(current_dialog.messages, 1)
  end
+ if current_dialog.id then
+ 	p.moving_anim_t = 0
+ end
+ -- check quel dialogue est en court
+ -- et fait les choses en fonction
  
- -- check which dialog ended
- -- and do stuff accordingly
- 
- -- if dialog 2 ended, add hp
- -- and hp max to the player
+ -- si le dialogue 2 est fini
+ -- ajoute de l'hp max
 	if current_dialog.id == 2 and current_dialog.messages and count(current_dialog.messages) == 0 then
   p.max_hp += 2 
   p.hp += 2
  end
  
- -- if a dialog ended, erase
- -- data from the current dialog
- -- as we won't show the dialog
- -- anymore
+ -- si le dialogue est fini,
+ -- ecrase les donnees du dialogue
+ -- pour ne pas le reafficher 
 	if count(current_dialog.messages) == 0 then
  	current_dialog = {}
 	end
@@ -252,7 +291,8 @@ dialog_2 = {
 		{name = "vache", message = "bonne chance !"}	
 	}	
 }
-	
+
+-- dessine la boite de dialogue
 function draw_dialog_box(x, y, name, message)
 	if name then
 	 rectfill(x + 2, y - 8, x + #name * 4 + 6, y-1, 2)
@@ -265,6 +305,7 @@ end
 -->8
 --interface
 
+--place l'interface avec hp + item
 function draw_ui()
 	palt(0,false)
 	palt(3,true)
@@ -273,6 +314,8 @@ function draw_ui()
 	print_outline("X"..p.item, 10,2,7)
 end
 
+-- permet d'avoir le texte en 
+-- noir et blanc 
 function print_outline(text,x,y)
 	print(text,x-1,y,0)
 	print(text,x+1,y,0)
@@ -281,7 +324,8 @@ function print_outline(text,x,y)
 	print(text,x,y,7)
 end
 
-
+-- dessine les coeurs + armure
+-- avec leurs caracteristiques
 function draw_hud()
 	for i=1, p.max_hp do
 		if i <= p.hp then
