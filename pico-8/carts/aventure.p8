@@ -80,12 +80,12 @@ end
 
 function create_player()
 	p={
-		x=12,y=28,
+		x=22,y=21,
 		ox=0,oy=0,
 		start_ox=0,start_oy=0,
 		anim_t=0,
-		hp=10,
-		max_hp=10,
+		hp=3,
+		max_hp=3,
 		armor=0,
 		sprite=17,
 		keys=0,
@@ -93,7 +93,8 @@ function create_player()
 		is_moving=true,
 		moving_anim_t=0,
 		number_of_death=0,
-		over=0
+		over=0,
+		sword=0
 	}
 	
 	f={
@@ -114,7 +115,7 @@ function create_player()
 	
 	g={
 		x=22,y=28,
-		hp=5,
+		hp=10,
 		sprite=51,
 		anim_t=0
 	}
@@ -209,7 +210,7 @@ function check_item(x,y)
 		pick_up_item(x,y)
 	elseif check_flag(2,newx,newy) and p.item>0  then
 		next_item(newx,newy)
-	elseif check_flag(3,newx,newy) and p.keys==3 then
+	elseif check_flag(3,newx,newy) and p.keys==2 then
 		open_labyrinthe(newx,newy)
 	end
 end
@@ -241,6 +242,7 @@ function are_rects_colliding(x1, y1, w1, h1, x2, y2, w2, h2)
 end
 
 function attack()
+p.is_attacking=true
  if are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, t.x * 8, t.y * 8, 8, 8) then
   t.hp -= 1
 	 t.x -= 1
@@ -267,8 +269,9 @@ function anim_enemies()
  anim_farmer()
  anim_turtle()
  anim_grenouille()
- anim_poussin()
+ --anim_poussin()
 end
+
 
 function anim_farmer()
  local movement = get_movement(f.anim_t, 48,4)
@@ -280,7 +283,23 @@ function anim_farmer()
 		elseif movement == 2 then
 			spr(65,f.x*8,f.y*8,2,2)
 			if are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, f.x * 8, f.y * 8, 16, 16) then
- 		 	p.hp-=0.07
+ 			if p.armor>0 then 
+ 		 	p.armor-=0.07
+ 		 elseif p.armor<0 then
+ 		 	p.hp-=0.14
+ 		 end
+				if p.hp<1 then
+		 			p.x=5
+						p.y=2
+						p.hp=p.max_hp
+						p.armor=5
+						f.hp=20
+						p.over+=1
+						p.number_of_death+=1
+						if p.over == 2 then
+	 				state=1
+	 			end
+	 		end
  		end
  	else
 			spr(10,f.x*8,f.y*8,2,2)
@@ -345,6 +364,25 @@ function anim_grenouille()
 			spr(83,g.x*8-8,g.y*8,2,1)
 		elseif movement == 2 then
 			spr(99,g.x*8-8,g.y*8,2,1)
+			if are_rects_colliding(newx * 8, newy * 8, 8, 8, g.x * 8-8, g.y * 8, 16, 16) then
+ 			if p.armor>0 then 
+ 		 	p.armor-=0.07
+ 		 elseif p.armor<0 then
+ 		 	p.hp-=0.14
+ 		 end
+				if p.hp<1 then
+		 		p.x=5
+					p.y=2
+					p.hp=p.max_hp
+					p.armor=5
+					f.hp=20
+					p.over+=1
+					p.number_of_death+=1
+					if p.over == 2 then
+	 				state=1
+	 			end
+	 		end
+ 		end
 		end
 	else 
 	 spr(51,g.x*8,g.y*8,1,1)
@@ -353,6 +391,20 @@ end
 
 
 function anim_poussin()
+	local movement = get_movement(p.anim_t, 48,5)
+		if p.is_attacking == true then
+			if movement ==0  then
+		 	spr(18,p.x*8,p.y*8,1,1,pflip)
+			elseif movement == 1 or movement == 3 then
+				spr(52,p.x*8-8,p.y*8,1,1,pflip)
+			elseif movement == 2 then
+				spr(32,p.x*8-8,p.y*8,1,1,pflip)
+			elseif movement == 3 then
+				spr(48,p.x*8-8,p.y*8,1,1,pflip)
+			end
+	 else 
+		 --spr(18,p.x*8,p.y*8,1,1)
+		end
 end
 
 
