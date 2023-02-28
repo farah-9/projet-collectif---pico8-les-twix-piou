@@ -69,7 +69,7 @@ end
 
 function create_player()
 	p={
-		x=22,y=15,
+		x=20,y=16,
 		ox=0,oy=0,
 		start_ox=0,start_oy=0,
 		anim_t=0,
@@ -135,7 +135,12 @@ function player_movement()
 	
 	if (newx!=p.x or newy!=p.y) and
 	not check_flag(0,newx,newy) and
-	not are_rects_colliding(newx * 8, newy * 8, 8, 8, t.x * 8, t.y * 8, 8, 8) then
+	not are_rects_colliding(newx * 8, newy * 8, 8, 8, t.x * 8, t.y * 8, 8, 8) and 
+	not	are_rects_colliding(newx * 8, newy * 8, 8, 8, g.x * 8, g.y * 8, 8, 8)and 
+	not	are_rects_colliding(newx * 8, newy * 8, 8, 8, g.x * 8-8, g.y * 8, 8, 8)and 
+	not	are_rects_colliding(newx * 8, newy * 8, 8, 8, f.x * 8, f.y * 8, 8, 8)	and 
+	not	are_rects_colliding(newx * 8, newy * 8, 8, 8, f.x * 8+8, f.y * 8, 8, 8)and 
+	not	are_rects_colliding(newx * 8, newy * 8, 8, 8, f.x * 8+8, f.y * 8+8, 8, 8)then
 		p.x=mid(0,newx,127)
 		p.y=mid(0,newy,63)
 		p.start_ox=newox
@@ -215,11 +220,12 @@ end
 
 -->8
 --attack
+
 function are_rects_colliding(x1, y1, w1, h1, x2, y2, w2, h2)
-  return x1 < x2 + w2 and
-         x1 + w1 > x2 and
-         y1 < y2 + h2 and
-         y1 + h1 > y2
+ return x1 < x2 + w2 and
+        x1 + w1 > x2 and
+        y1 < y2 + h2 and
+        y1 + h1 > y2
 end
 
 function attack()
@@ -232,7 +238,7 @@ function attack()
 	  p.armor = 5
 	  p.hp=p.max_hp
 	  music(33)
-	 	 end
+	 end
 	--elseif are_rects_colliding
 	end
 end
@@ -304,14 +310,14 @@ function anim_grenouille()
   return
  end
 
- local movement = get_movement(g.anim_t, 96,8)
+ local movement = get_movement(g.anim_t, 48,4)
 	if g.is_attacking == true then
 		if movement ==0  then
 	 	spr(51,g.x-8,g.y*8,1,1)
 		elseif movement == 1 and movement == 3 then
-			spr(83,g.x-8,g.y*8,2,1)
+			spr(83,g.x*8,g.y*8,2,1)
 		elseif movement == 2 then
-			spr(99,g.x-8,g.y*8,2,1)
+			spr(99,g.x*8,g.y*8,2,1)
 		end
 	else 
 	 spr(51,g.x-8,g.y*8,1,1)
