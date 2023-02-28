@@ -68,18 +68,19 @@ end
 
 function create_player()
 	p={
-		x=5,y=2,
+		x=22,y=15,
 		ox=0,oy=0,
 		start_ox=0,start_oy=0,
 		anim_t=0,
-		hp=3,
-		max_hp=3,
+		hp=5,
+		max_hp=5,
 		armor=0,
 		sprite=17,
 		keys=0,
 		item=0,
 		is_moving=true,
-		moving_anim_t=0
+		moving_anim_t=0,
+		number_of_death=0
 	}
 	
 	f={
@@ -220,7 +221,6 @@ end
 
 function attack()
  if are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, t.x * 8, t.y * 8, 8, 8) then
-  p.hp-=2
   t.hp -= 1
 	 t.x -= 1
 	 if t.hp <= 0 then
@@ -229,14 +229,7 @@ function attack()
 	  p.armor = 5
 	  p.hp=p.max_hp
 	  music(33)
-	 elseif p.hp<=0 then
-	 	newx=5
-	 	newy=2
-	 	p.hp=p.max_hp
-	 	t.x=21
-	 	t.y=13
-	 	t.hp=3
-	 end
+	 	 end
 	--elseif are_rects_colliding
 	end
 end
@@ -275,6 +268,18 @@ function anim_turtle()
  		  spr(67, t.x*8, t.y*8, 1, 1)
  		 elseif movement == 1 then
  		 	spr(68, t.x*8, t.y*8, 1, 1) 
+ 		 	if are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, t.x * 8, t.y * 8, 8, 8) then
+ 		 		p.hp-=0.07
+ 		 		if p.hp<1 then
+		 				p.x=5
+					 	p.y=2
+					 	p.hp=p.max_hp
+					 	t.x=21
+					 	t.y=13
+					 	t.hp=3
+					 	p.number_of_death+=1
+ 		 		end
+ 		 	end
  		 else 
  		 	spr(33, t.x*8, t.y*8, 1, 1)
  		 end
