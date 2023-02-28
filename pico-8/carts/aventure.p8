@@ -6,9 +6,20 @@ function _init()
 	damage={}
  enemies={}
  music(33)
+ state = 0
 end
 
 function _update60()
+	if (state==0) update_game() 
+	if (state==1) update_gameover()
+end
+
+function _draw()
+	if (state==0) draw_game()
+	if (state==1) draw_gameover()
+end
+
+function update_game()
 	show_dialog_if_needed()
 	if allow_player_movement() then
 		player_movement()
@@ -20,7 +31,7 @@ function _update60()
 	t.anim_t += 1
 end
 
-function _draw()
+function draw_game()
 	cls()
  draw_map()
  draw_player()
@@ -68,7 +79,7 @@ end
 
 function create_player()
 	p={
-		x=10,y=28,
+		x=23,y=13,
 		ox=0,oy=0,
 		start_ox=0,start_oy=0,
 		anim_t=0,
@@ -80,7 +91,8 @@ function create_player()
 		item=0,
 		is_moving=true,
 		moving_anim_t=0,
-		number_of_death=0
+		number_of_death=0,
+		over=0
 	}
 	
 	f={
@@ -277,13 +289,17 @@ function anim_turtle()
  		 	if are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, t.x * 8, t.y * 8, 8, 8) then
  		 		p.hp-=0.07
  		 		if p.hp<1 then
-		 				p.x=5
+ 		 			p.x=5
 					 	p.y=2
 					 	p.hp=p.max_hp
 					 	t.x=21
 					 	t.y=13
 					 	t.hp=3
+					 	p.over+=1
 					 	p.number_of_death+=1
+					 	if p.over == 2 then
+		 					state=1
+		 				end
  		 		end
  		 	end
  		 else 
@@ -465,6 +481,17 @@ function draw_hud()
 	for armor_point=1, p.armor do
 	 spr(63, 15 + armor_point * 7, 9)
 	end
+end
+-->8
+function update_gameover()
+	
+end
+
+function draw_gameover()
+	cls(8)
+	print("tu es mort!",40,50,7)
+	print("reessaie si tu veux",25,65,5)
+	print("venger ta famille!",27,75,5)
 end
 __gfx__
 00000000000aaa00000aaa0030033333333333331111111144444444333bb3331111111144444444999999999999999999999999999999999999999999696969
