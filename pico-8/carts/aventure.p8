@@ -125,7 +125,8 @@ function create_player()
 		x=22,y=28,
 		hp=10,
 		sprite=51,
-		anim_t=0
+		anim_t=0,
+		step=0
 	}
 end
 
@@ -286,6 +287,18 @@ function attack()
 	  music(33)
 	 end
 	--elseif are_rects_colliding
+	elseif are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, g.x * 8-8, g.y * 8, 16, 8) then
+  g.hp -= 1
+  g.step+=1
+  if step==2 then
+  	g.x+=1
+  end
+	 if f.hp <= 0 then
+	  f.x = -5
+	  f.is_attacking = false
+	  music(33)
+	 end
+	--elseif are_rects_colliding
 	end
 end
 
@@ -387,11 +400,11 @@ function anim_grenouille()
 			spr(83,g.x*8-8,g.y*8,2,1)
 		elseif movement == 2 then
 			spr(99,g.x*8-8,g.y*8,2,1)
-			if are_rects_colliding(newx * 8, newy * 8, 8, 8, g.x * 8-8, g.y * 8, 16, 16) then
+			if are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, g.x * 8-8, g.y * 8, 16, 8) then
  			if p.armor>0 then 
  		 	p.armor-=0.07
  		 elseif p.armor<0 then
- 		 	p.hp-=0.14
+ 		 	p.hp-=0.07
  		 end
 				if p.hp<1 then
 		 		p.x=5
