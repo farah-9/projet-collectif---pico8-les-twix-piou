@@ -79,7 +79,8 @@ function create_player()
 		keys=0,
 		item=0,
 		is_moving=true,
-		moving_anim_t=0
+		moving_anim_t=0,
+		number_of_death=0
 	}
 	
 	f={
@@ -220,15 +221,28 @@ end
 
 function attack()
  if are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, t.x * 8, t.y * 8, 8, 8) then
+  p.hp-=2
   t.hp -= 1
 	 t.x -= 1
 	 if t.hp <= 0 then
 	  t.x = -1
 	  t.is_attacking = false
 	  p.armor = 5
+	  p.hp=p.max_hp
 	  music(33)
+	 elseif p.hp<=0 then
+	 	newx=5
+	 	newy=2
+	 	p.hp=p.max_hp
+	 	t.x=21
+	 	t.y=13
+	 	t.hp=3
+  end
+		end
+  end
 	 end
- end
+	--elseif are_rects_colliding
+	end
 end
 
 function anim_enemies()
@@ -319,6 +333,8 @@ function show_dialog_if_needed()
   if newx==12 and newy==18 and count(dialog_6.messages) > 0 then
    current_dialog = dialog_6
   end
+  if nb_of_death > 0 and dialog_7.messages and count(dialog_7.messages) > 0 then
+			current_dialog = dialog_7
 end
 
 function interact_with_dialog()
@@ -421,6 +437,12 @@ dialog_6 = {
 	}
 }
 
+dialog_7 = {
+	id=7,
+	messages = {
+		{message = "gagne de la force et reessaie !"}
+	}
+}
 -- dessine la boite de dialogue
 function draw_dialog_box(x, y, name, message)
 	if name then
