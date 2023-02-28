@@ -313,14 +313,14 @@ function anim_grenouille()
  local movement = get_movement(g.anim_t, 48,4)
 	if g.is_attacking == true then
 		if movement ==0  then
-	 	spr(51,g.x-8,g.y*8,1,1)
-		elseif movement == 1 and movement == 3 then
-			spr(83,g.x*8,g.y*8,2,1)
+	 	spr(51,g.x*8,g.y*8,1,1)
+		elseif movement == 1 or movement == 3 then
+			spr(83,g.x*8-8,g.y*8,2,1)
 		elseif movement == 2 then
-			spr(99,g.x*8,g.y*8,2,1)
+			spr(99,g.x*8-8,g.y*8,2,1)
 		end
 	else 
-	 spr(51,g.x-8,g.y*8,1,1)
+	 spr(51,g.x*8,g.y*8,1,1)
 	end
 end
 
