@@ -303,9 +303,9 @@ function show_dialog_if_needed()
  if newx==21 and newy==13 and count(dialog_3.messages) > 0 then
   	current_dialog = dialog_3
  end
- -- if newx==0 and newy==0 and count(dialog_4.messages) > 0 then
-  --	current_dialog = dialog_4
-  --end
+ 	if newx==22 and newy==28 and count(dialog_4.messages) > 0 then
+  	current_dialog = dialog_4
+  end
   if newx==4 and newy==27 and count(dialog_5.messages) > 0 then
   	current_dialog = dialog_5
   end
@@ -334,6 +334,7 @@ function interact_with_dialog()
  
  if current_dialog.id == 5 and current_dialog.messages and count(current_dialog.messages) == 0 then
 			f.is_attacking = true 
+			music(44)
  end 
  
  if current_dialog.id == 3 and current_dialog.messages and count(current_dialog.messages) == 0 then
@@ -341,6 +342,10 @@ function interact_with_dialog()
 			music(44)
  end 
  
+ if current_dialog.id == 4 and current_dialog.messages and count(current_dialog.messages) == 0 then
+			f.is_attacking = true 
+			music(44)
+ end 
  -- si le dialogue est fini,
  -- ecrase les donnees du dialogue
  -- pour ne pas le reafficher 
@@ -372,18 +377,18 @@ dialog_3 = {
 	id=3,
 	messages = {
 		{name = "poussin", message="tortue, j'ai besoin de toi !"},
-		{name = "tortue", message="quoi ? tu veux te venger du fermier ?"},
-		{name = "tortue", message="ne compte pas sur moi pour t'aider."},
-		{name = "tortue", message="battons-nous ! si tu gagnes, je te donne ma defense !"}
+		{name = "tortue", message="quoi ? tu veux te venger du \nfermier ?"},
+		{name = "tortue", message="ne compte pas sur moi \npour t'aider."},
+		{name = "tortue", message="battons-nous ! si tu gagnes, \nje te donne ma defense !"}
 	}
 }
 dialog_4 = {
 	id=4,
 	messages = {
 		{name = "poussin", message="grenouille, j'ai besoin de toi !"},
-		{name = "grenouille", message="quoi ? tu veux te venger du fermier ?"},
-		{name = "grenouille", message="il va falloir me passer sur le corps !"},
-		{name = "grenouille", message="si tu gagnes, je te donne ma vitesse !"}
+		{name = "grenouille", message="quoi ? tu veux te venger \ndu fermier ?"},
+		{name = "grenouille", message="il va falloir me passer \nsur le corps !"},
+		{name = "grenouille", message="si tu gagnes, je te \ndonne ma vitesse !"}
 	}
 }
 dialog_5 = {
@@ -488,10 +493,10 @@ __gfx__
 33dddd33ff44464444f7777933939333333393930000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 33133333999446449999777900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 31a133b3799446449999777700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-33133333779ddadd9999777700404000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-33333333774444444999977908888800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-33333e33944479944499977900bbb880000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-3333eae394477779449997990b8b8880000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+33133333779ddadd9999777700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+33333333774444444999977900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+33333e33944479944499977900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+3333eae3944777794499979900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 33b33e339f9977779f99999900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 333333339f9997779f99999900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 333333b3111111111111111100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
