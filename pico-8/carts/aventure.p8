@@ -6,9 +6,15 @@ function _init()
 	damage={}
  enemies={}
  music(33)
+ state = 0
 end
 
 function _update60()
+	if (state==0) update_game()
+	if (statte==1) update_gameover()
+end
+
+function update_game()
 	show_dialog_if_needed()
 	if allow_player_movement() then
 		player_movement()
@@ -19,9 +25,20 @@ function _update60()
 	f.anim_t += 1
 	t.anim_t += 1
 	g.anim_t += 1
+	if p.is_attacking then
+		p.attack_t += 1
+		if p.attack_t >=48 then
+			p.is_attacking = false
+			p.attack_t = 0
+		end
+	end
 end
 
 function _draw()
+	if (state==0) draw_game()
+	if (state==1) update_gameover()
+end
+function draw_game()
 	cls()
  draw_map()
  draw_player()
@@ -69,10 +86,11 @@ end
 
 function create_player()
 	p={
-		x=20,y=16,
+		x=5,y=2,
 		ox=0,oy=0,
 		start_ox=0,start_oy=0,
 		anim_t=0,
+		attack_t=0,
 		hp=3,
 		max_hp=3,
 		armor=0,
@@ -166,7 +184,21 @@ function draw_player()
 	 		spr(2, x, y, 1, 1, pflip)	
 	 	end
 	 else
-	 	spr(18, x, y, 1, 1, pflip) 
+	  
+ local movement = get_movement(p.attack_t, 48,5)
+	if p.is_attacking == true then
+		if movement ==0  then
+	 	spr(18,x,y,1,1, pflip)
+		elseif movement == 1 or movement == 3 then
+			spr(52,x,y,1,1, pflip)
+		elseif movement == 2 then
+			spr(32,x,y,1,1, pflip)
+		elseif movement == 4 then
+			spr(48,x,y,1,1, pflip)
+		end
+	else 
+	 spr(18,x,y,1,1, pflip)
+	end 
 		end
 	else
 -- si perso n'a pas d'item et bouge
@@ -229,7 +261,10 @@ function are_rects_colliding(x1, y1, w1, h1, x2, y2, w2, h2)
 end
 
 function attack()
- if are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, t.x * 8, t.y * 8, 8, 8) then
+	if not p.is_attacking then
+		p.is_attacking = true
+	end
+ 	if are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, t.x * 8, t.y * 8, 8, 8) then
   t.hp -= 1
 	 t.x -= 1
 	 if t.hp <= 0 then
@@ -247,7 +282,6 @@ function anim_enemies()
  anim_farmer()
  anim_turtle()
  anim_grenouille()
- anim_poussin()
 end
 
 function anim_farmer()
@@ -325,8 +359,6 @@ function anim_grenouille()
 end
 
 
-function anim_poussin()
-end
 
 
 --x:11 y:5 coordonne vache
@@ -422,8 +454,7 @@ dialog_2 = {
 		{name = "poussin", message="je pars me venger du \nvilain fermier !"},
 		{name = "poussin", message="il a mange mes parents..."},
 		{name = "poussin", message="vache.. prete-moi ta force!"},
-		{name = "vache", message = "oh, poussin... bien sur, je \nte donne ma force!"},
-		{name = "vache", message = "je te donne aussi un peu \nde ma vitalite !"},
+		{name = "vache", message = "oh, poussin... bien sur, \nje te donne ma vitalite !"},
 		{name = "vache", message = "bonne chance !"}	
 	}	
 }
@@ -442,7 +473,7 @@ dialog_4 = {
 		{name = "poussin", message="grenouille, \nj'ai besoin de toi !"},
 		{name = "grenouille", message="quoi ? tu veux te venger \ndu fermier ?"},
 		{name = "grenouille", message="il va falloir me passer \nsur le corps !"},
-		{name = "grenouille", message="si tu me donnes 5 coups, \nje te donne ma vitesse !"}
+		{name = "grenouille", message="si tu me donnes 5 coups, \nje te donne mon attaque !"}
 	}
 }
 dialog_5 = {
