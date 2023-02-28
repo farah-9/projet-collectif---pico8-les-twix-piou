@@ -68,12 +68,12 @@ end
 
 function create_player()
 	p={
-		x=22,y=15,
+		x=10,y=28,
 		ox=0,oy=0,
 		start_ox=0,start_oy=0,
 		anim_t=0,
-		hp=5,
-		max_hp=5,
+		hp=3,
+		max_hp=3,
 		armor=0,
 		sprite=17,
 		keys=0,
@@ -132,7 +132,12 @@ function player_movement()
 	
 	if (newx!=p.x or newy!=p.y) and
 	not check_flag(0,newx,newy) and
-	not are_rects_colliding(newx * 8, newy * 8, 8, 8, t.x * 8, t.y * 8, 8, 8) then
+	not are_rects_colliding(newx * 8, newy * 8, 8, 8, t.x * 8, t.y * 8, 8, 8) and 
+	not	are_rects_colliding(newx * 8, newy * 8, 8, 8, g.x * 8, g.y * 8, 8, 8)and 
+	not	are_rects_colliding(newx * 8, newy * 8, 8, 8, g.x * 8-8, g.y * 8, 8, 8)and 
+	not	are_rects_colliding(newx * 8, newy * 8, 8, 8, f.x * 8, f.y * 8, 8, 8)	and 
+	not	are_rects_colliding(newx * 8, newy * 8, 8, 8, f.x * 8+8, f.y * 8, 8, 8)and 
+	not	are_rects_colliding(newx * 8, newy * 8, 8, 8, f.x * 8+8, f.y * 8+8, 8, 8)then
 		p.x=mid(0,newx,127)
 		p.y=mid(0,newy,63)
 		p.start_ox=newox
@@ -189,7 +194,7 @@ function check_item(x,y)
 		pick_up_item(x,y)
 	elseif check_flag(2,newx,newy) and p.item>0  then
 		next_item(newx,newy)
-	elseif check_flag(3,newx,newy) and p.keys==1 then
+	elseif check_flag(3,newx,newy) and p.keys==0 then
 		open_labyrinthe(newx,newy)
 	end
 end
@@ -212,11 +217,12 @@ end
 
 -->8
 --attack
+
 function are_rects_colliding(x1, y1, w1, h1, x2, y2, w2, h2)
-  return x1 < x2 + w2 and
-         x1 + w1 > x2 and
-         y1 < y2 + h2 and
-         y1 + h1 > y2
+ return x1 < x2 + w2 and
+        x1 + w1 > x2 and
+        y1 < y2 + h2 and
+        y1 + h1 > y2
 end
 
 function attack()
@@ -229,7 +235,7 @@ function attack()
 	  p.armor = 5
 	  p.hp=p.max_hp
 	  music(33)
-	 	 end
+	 end
 	--elseif are_rects_colliding
 	end
 end
