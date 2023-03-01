@@ -15,9 +15,9 @@ function _update60()
 end
 
 function _draw()
-	if (state==1) draw_game()
-	if (state==2) draw_gameover()
-	if (state==0) draw_win()
+	if (state==0) draw_game()
+	if (state==1) draw_gameover()
+	if (state==2) draw_win()
 end
 
 function update_game()
@@ -289,6 +289,7 @@ function attack()
 	 if f.hp <= 0 then
 	  f.x = -5
 	  f.is_attacking = false
+	  state=2
 	  music(33)
 	 elseif f.hp == 10 then
 	 	current_dialog = dialog_8
@@ -654,7 +655,7 @@ function deal_damage()
  	if p.armor>0 then 
  		p.armor-=0.85
  	else
-  	p.hp-=0.75
+  	p.hp-=1.25
   end
 		if p.hp<1 then
 			p.x=5
@@ -666,7 +667,6 @@ function deal_damage()
 			p.number_of_death+=1
 			if p.over == 2 then
 				state=1
-				
 			end
 		end
  end
