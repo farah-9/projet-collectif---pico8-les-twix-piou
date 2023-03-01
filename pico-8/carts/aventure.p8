@@ -496,7 +496,7 @@ dialog_4 = {
 		{name = "poussin", message="grenouille, \nj'ai besoin de toi !"},
 		{name = "grenouille", message="quoi ? tu veux te venger \ndu fermier ?"},
 		{name = "grenouille", message="il va falloir me passer \nsur le corps !"},
-		{name = "grenouille", message="si tu me donnes 5 coups, \nje te donne mon attaque !"}
+		{name = "grenouille", message="si tu me donnes 10 coups, \nje te donne mon attaque !"}
 	}
 }
 dialog_5 = {
