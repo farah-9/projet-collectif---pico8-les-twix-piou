@@ -5,8 +5,10 @@ function _init()
 	create_player()
 	damage={}
  enemies={}
+ current_dialog={}
  music(33)
  state = 0
+ reset_dialogue()
 end
 
 function _update60()	
@@ -305,7 +307,7 @@ function attack()
 	 if g.hp <= 0 then
 	  g.x = -5
 	  g.is_attacking = false
-	  p.armor=p.armor_max
+	  p.armor=p.max_armor
 	  p.hp=p.max_hp
 	  music(33)
 	 end
@@ -388,8 +390,6 @@ end
 -->8
 --dialogues
 
-current_dialog = {}
-
 -- determine quand afficher les
 -- dialogues
 function show_dialog_if_needed()
@@ -462,81 +462,81 @@ function interact_with_dialog()
  	current_dialog = {}
 	end
 end
-
-dialog_1 = {
-	id=1,
-	messages = {
-  {message="ta peur t'empeche de traverser \nle pont!"},
-  {message="trouve un objet qui te donnera \ndu courage !"}
+function reset_dialogue()
+	dialog_1 = {
+		id=1,
+		messages = {
+	  {message="ta peur t'empeche de traverser \nle pont!"},
+	  {message="trouve un objet qui te donnera \ndu courage !"}
+		}
 	}
-}
-dialog_2 = {
-	id=2,
-	messages = {
-		{name = "poussin", message="vache, j'ai besoin de toi !"},
-		{name = "poussin", message="je pars me venger du \nvilain fermier !"},
-		{name = "poussin", message="il a mange mes parents..."},
-		{name = "poussin", message="vache.. prete-moi ta force!"},
-		{name = "vache", message = "oh, poussin... bien sur, \nje te donne ma vitalite !"},
-		{name = "vache", message = "bonne chance !"}	
-	}	
-}
-dialog_3 = {
-	id=3,
-	messages = {
-		{name = "poussin", message="tortue, j'ai besoin de toi !"},
-		{name = "tortue", message="quoi ? tu veux te venger du \nfermier ?"},
-		{name = "tortue", message="ne compte pas sur moi \npour t'aider."},
-		{name = "tortue", message="battons-nous ! \nsi tu me donnes 3 coups, \nje te donne ma defense !"}
+	dialog_2 = {
+		id=2,
+		messages = {
+			{name = "poussin", message="vache, j'ai besoin de toi !"},
+			{name = "poussin", message="je pars me venger du \nvilain fermier !"},
+			{name = "poussin", message="il a mange mes parents..."},
+			{name = "poussin", message="vache.. prete-moi ta force!"},
+			{name = "vache", message = "oh, poussin... bien sur, \nje te donne ma vitalite !"},
+			{name = "vache", message = "bonne chance !"}	
+		}	
 	}
-}
-dialog_4 = {
-	id=4,
-	messages = {
-		{name = "poussin", message="grenouille, \nj'ai besoin de toi !"},
-		{name = "grenouille", message="quoi ? tu veux te venger \ndu fermier ?"},
-		{name = "grenouille", message="il va falloir me passer \nsur le corps !"},
-		{name = "grenouille", message="si tu me donnes 10 coups, \nje te donne mon attaque !"}
+	dialog_3 = {
+		id=3,
+		messages = {
+			{name = "poussin", message="tortue, j'ai besoin de toi !"},
+			{name = "tortue", message="quoi ? tu veux te venger du \nfermier ?"},
+			{name = "tortue", message="ne compte pas sur moi \npour t'aider."},
+			{name = "tortue", message="battons-nous ! \nsi tu me donnes 3 coups, \nje te donne ma defense !"}
+		}
 	}
-}
-dialog_5 = {
-	id=5,
-	messages = {
-		{name = "poussin", message="vilain fermier ! \nmoi et mes ami-es allons te \nvaincre !"},
-		{name = "vilain fermier", message="hahahaa ! \nvous osez vous rebellez ?"},
-		{name = "vilain fermier", message="pourquoi ? parce que j'ai \nmange tes parents poussin ?"},
-		{name = "poussin", message="ne parle pas de mes parents !"}
+	dialog_4 = {
+		id=4,
+		messages = {
+			{name = "poussin", message="grenouille, \nj'ai besoin de toi !"},
+			{name = "grenouille", message="quoi ? tu veux te venger \ndu fermier ?"},
+			{name = "grenouille", message="il va falloir me passer \nsur le corps !"},
+			{name = "grenouille", message="si tu me donnes 10 coups, \nje te donne mon attaque !"}
+		}
 	}
-}
-
-dialog_6 = {
-	id=6,
-	messages = {
-		{message = "tu n'es pas encore pret..."}
+	dialog_5 = {
+		id=5,
+		messages = {
+			{name = "poussin", message="vilain fermier ! \nmoi et mes ami-es allons te \nvaincre !"},
+			{name = "vilain fermier", message="hahahaa ! \nvous osez vous rebellez ?"},
+			{name = "vilain fermier", message="pourquoi ? parce que j'ai \nmange tes parents poussin ?"},
+			{name = "poussin", message="ne parle pas de mes parents !"}
+		}
 	}
-}
-
-dialog_7 = {
-	id=7,
-	messages = {
-		{message = "gagne de la force \net reessaie !"}
+	
+	dialog_6 = {
+		id=6,
+		messages = {
+			{message = "tu n'es pas encore pret..."}
+		}
 	}
-}
-
-dialog_8 = {
-	id=8,
-	messages = {
-		{name = "fermier", message = "si tu continues, \ntu vas rejoindre tes parents !"}
+	
+	dialog_7 = {
+		id=7,
+		messages = {
+			{message = "gagne de la force \net reessaie !"}
+		}
 	}
-}
-
+	
+	dialog_8 = {
+		id=8,
+		messages = {
+			{name = "fermier", message = "si tu continues, \ntu vas rejoindre tes parents !"}
+		}
+	}
+end
 
 -- dessine la boite de dialogue
 function draw_dialog_box(x, y, name, message)
 	if name then
 	 rectfill(x + 2, y - 8, x + #name * 4 + 6, y-1, 2)
 		print(name, x + 5, y - 6, 15)
-	end 
+	end
 	rectfill(x, y, x+124, y+22, 2)
 	rectfill(x + 1, y + 1, x+123, y+21, 4)
  print(message, x+3, y+3, 0)
@@ -582,7 +582,13 @@ end
 --ecran
 
 function update_gameover()
-	
+	if btnp(❎)	then
+		_init()
+		state=0
+		mset(10,1,3)
+		mset(3,5,49)
+		mset(12,18,47)
+	end
 end
 
 function draw_gameover()
