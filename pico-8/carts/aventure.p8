@@ -290,6 +290,8 @@ function attack()
 	  f.x = -5
 	  f.is_attacking = false
 	  music(33)
+	 elseif f.hp == 10 then
+	 	current_dialog = dialog_8
 	 end
 	--elseif are_rects_colliding
 	elseif are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, g.x * 8-8, g.y * 8, 16, 8) then
@@ -357,7 +359,6 @@ end
 function get_movement(anim_t, loop_size, nb_of_movements)
  return flr(anim_t % loop_size / (loop_size / nb_of_movements)) 
 end
-
  
  
 function anim_grenouille()
@@ -520,6 +521,15 @@ dialog_7 = {
 		{message = "gagne de la force \net reessaie !"}
 	}
 }
+
+dialog_8 = {
+	id=8,
+	messages = {
+		{name = "fermier", message = "si tu continues, \ntu vas rejoindre tes parents !"}
+	}
+}
+
+
 -- dessine la boite de dialogue
 function draw_dialog_box(x, y, name, message)
 	if name then
