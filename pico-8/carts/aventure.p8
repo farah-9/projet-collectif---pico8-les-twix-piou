@@ -6,23 +6,30 @@ function _init()
 	damage={}
  enemies={}
  current_dialog={}
- music(33)
- state = 0
+ state = 3
  reset_dialogue()
+ play_music=0
+ music(27)
 end
 
 function _update60()	
 	if (state==0) update_game() 
 	if (state==1) update_gameover()
+	if (state==3) update_start()
 end
 
 function _draw()
 	if (state==0) draw_game()
 	if (state==1) draw_gameover()
 	if (state==2) draw_win()
+	if (state==3) draw_start()
 end
 
 function update_game()
+	if play_music==0 then
+		music(33)
+		play_music+=1
+	end
 	show_dialog_if_needed()
 	if allow_player_movement() then
 		player_movement()
@@ -287,7 +294,7 @@ function attack()
  	end
 	--elseif are_rects_colliding
 	elseif are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, f.x * 8, f.y * 8, 16, 16) then
-  f.hp -= 1
+  f.hp -= 2
 	 if f.hp <= 0 then
 	  f.x = -5
 	  f.is_attacking = false
@@ -503,7 +510,7 @@ function reset_dialogue()
 		id=5,
 		messages = {
 			{name = "poussin", message="vilain fermier ! \nmoi et mes ami-es allons te \nvaincre !"},
-			{name = "vilain fermier", message="hahahaa ! \nvous osez vous rebellez ?"},
+			{name = "vilain fermier", message="hahahaa ! \nvous osez vous rebeller ?"},
 			{name = "vilain fermier", message="pourquoi ? parce que j'ai \nmange tes parents poussin ?"},
 			{name = "poussin", message="ne parle pas de mes parents !"}
 		}
@@ -609,6 +616,25 @@ function draw_win()
 	print("tu as reussi a",55,54,8)
 	print("venger",71,62,8)
 	print("tes parents!",60,70,8)
+end
+
+function update_start()
+	if btnp(❎)	then
+		_init()
+		state=0
+	end
+end
+
+function draw_start()
+	cls(0)
+	sspr(8,8,8,8,25,85,24,24)
+	palt(9,true)
+	sspr(112,0,16,16,70,75,40,40,true,false)
+	palt(10,false)
+	palt(9,false)
+	print("le poussin vengeur!",25,30,8)
+	print("pour commencer a jouer",20,50,7)
+	print("appuie sur ❎",35,60,7)
 end
 -->8
 --damage
