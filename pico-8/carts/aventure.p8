@@ -587,11 +587,11 @@ function draw_win()
 	cls(0)
 	music(-1,900)
 	camera()
-	sspr(0,8,8,8,15,30,32,32)
-	print("bravo!",70,30,8)
-	print("tu as reussi a",55,38,8)
-	print("venger",71,46,8)
-	print("tes parents!",63,
+	sspr(0,8,8,8,15,46,32,32)
+	print("bravo!",70,46,8)
+	print("tu as reussi a",55,54,8)
+	print("venger",71,62,8)
+	print("tes parents!",60,70,8)
 end
 -->8
 --damage
