@@ -407,7 +407,7 @@ function show_dialog_if_needed()
   if newx==6 and newy==26 and count(dialog_5.messages) > 0 then
   	current_dialog = dialog_5
   end
-  if newx==12 and newy==18 and count(dialog_6.messages) > 0 then
+  if newx==12 and newy==18 and count(dialog_6.messages) > 0 and p.keys < 3 then
    current_dialog = dialog_6
   end
   if p.number_of_death > 0 and newx==5 and newy==2 and dialog_7.messages and count(dialog_7.messages) > 0 then
