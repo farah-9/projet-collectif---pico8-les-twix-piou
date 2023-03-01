@@ -9,14 +9,15 @@ function _init()
  state = 0
 end
 
-function _update60()
+function _update60()	
 	if (state==0) update_game() 
 	if (state==1) update_gameover()
 end
 
 function _draw()
-	if (state==0) draw_game()
-	if (state==1) draw_gameover()
+	if (state==1) draw_game()
+	if (state==2) draw_gameover()
+	if (state==0) draw_win()
 end
 
 function update_game()
@@ -236,7 +237,7 @@ function check_item(x,y)
 		pick_up_item(x,y)
 	elseif check_flag(2,newx,newy) and p.item>0  then
 		next_item(newx,newy)
-	elseif check_flag(3,newx,newy) and p.keys==2 then
+	elseif check_flag(3,newx,newy) and p.keys==3 then
 		open_labyrinthe(newx,newy)
 	end
 end
@@ -271,17 +272,17 @@ function attack()
 	if not p.is_attacking then
 		p.is_attacking = true
 	end
- 	if are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, t.x * 8, t.y * 8, 8, 8) then
+ if are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, t.x * 8, t.y * 8, 8, 8) then
   t.hp -= 1
 	 t.x -= 1
-	 if t.hp <= 0 then
-	  t.x = -1
-	  t.is_attacking = false
-	  p.armor_max = 5
-	  p.armor = 5
-	  p.hp=p.max_hp
-	  music(33)
-	 end
+ 	if t.hp <= 0 then
+ 	 t.x = -1
+ 	 t.is_attacking = false
+ 	 p.armor_max = 5
+ 	 p.armor = 5
+ 	 p.hp=p.max_hp
+ 	 music(33)
+ 	end
 	--elseif are_rects_colliding
 	elseif are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, f.x * 8, f.y * 8, 16, 16) then
   f.hp -= 1
@@ -291,15 +292,18 @@ function attack()
 	  music(33)
 	 end
 	--elseif are_rects_colliding
-	elseif are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, g.x * 8-16, g.y * 8, 24, 8) then
+	elseif are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, g.x * 8-8, g.y * 8, 16, 8) then
   g.hp -= 1
   g.step+=1
-  if step==2 then
+  if g.step==2 then
   	g.x+=1
+  	g.step=0
   end
-	 if f.hp <= 0 then
-	  f.x = -5
-	  f.is_attacking = false
+	 if g.hp <= 0 then
+	  g.x = -5
+	  g.is_attacking = false
+	  p.armor=p.armor_max
+	  p.hp=p.max_hp
 	  music(33)
 	 end
 	--elseif are_rects_colliding
@@ -564,22 +568,37 @@ function draw_hud()
 	end
 end
 -->8
+--ecran
+
 function update_gameover()
 	
 end
 
 function draw_gameover()
-	cls(8)
+	cls()
+	music(0)
+	camera()
 	print("tu es mort!",40,50,7)
 	print("reessaie si tu veux",25,65,5)
 	print("venger ta famille!",27,75,5)
+end
+
+function draw_win()
+	cls(0)
+	music(-1,900)
+	camera()
+	sspr(0,8,8,8,15,30,32,32)
+	print("bravo!",70,30,8)
+	print("tu as reussi a",55,38,8)
+	print("venger",71,46,8)
+	print("tes parents!",63,
 end
 -->8
 --damage
 
 --fermier
 function deal_damage()
-	if are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, f.x * 8+16, f.y * 8+8, 16, 16) and
+	if are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 16, 16, f.x * 8, f.y * 8-8,24,24) and
 	f.is_attacking and f.anim_t % 48 == 24 then
  	if p.armor>0 then 
  		p.armor-=1
@@ -603,7 +622,7 @@ function deal_damage()
 --tortue
 	if are_rects_colliding(p.x * 8 - 8, p.y * 8 - 8, 24, 24, t.x * 8, t.y * 8, 8, 8)and
 		t.is_attacking and t.anim_t % 48 == 24 then
- 	p.hp-=0.5
+ 	p.hp-=1.75
  	if p.hp<1 then
  		p.x=5
 			p.y=2
@@ -631,12 +650,13 @@ function deal_damage()
 			p.x=5
 			p.y=2
 			p.hp=p.max_hp
-			p.armor=5
+			p.armor=p.max_armor
 			f.hp=20
 			p.over+=1
 			p.number_of_death+=1
 			if p.over == 2 then
 				state=1
+				
 			end
 		end
  end
@@ -922,7 +942,7 @@ __map__
 0707070707070707070707131413070707070704040707070707070707070707040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040407
 0707070707070707070707130413070707070704040707070707070707070707040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040407
 07070707070707070707073d2b3b070707717132327171717171717171717107040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040407
-07073d2b2b2b2b2b2b2b2b3a2a3a3b0707710861610808730808080808087107040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040407
+07073d2b2b2b2b2b2b2b2b3a2f3a3b0707710861610808730808080808087107040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040407
 07072c3a3a3a3a3a3a3a3a3a2a3a3c0707717361616108080808087208087107040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040407
 07072c3a2a2a2a2a3a3a2a2a2a3a3c0707710861616262626262626261087107040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040407
 07072c3a3a2a3a3a3a3a2a3a2a3a3c0707710808616262626262626161617107040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040407
