@@ -511,7 +511,7 @@ function reset_dialogue()
 		messages = {
 			{name = "poussin", message="vilain fermier ! \nmoi et mes ami-es allons te \nvaincre !"},
 			{name = "vilain fermier", message="hahahaa ! \nvous osez vous rebeller ?"},
-			{name = "vilain fermier", message="pourquoi ? parce que j'ai \nmange tes parents poussin ?"},
+			{name = "vilain fermier", message="pourquoi ? parce que j'ai \nmange tes parents, poussin ?"},
 			{name = "poussin", message="ne parle pas de mes parents !"}
 		}
 	}
@@ -602,9 +602,11 @@ function draw_gameover()
 	cls()
 	music(0)
 	camera()
-	print("tu es mort!",40,50,7)
-	print("reessaie si tu veux",25,65,5)
-	print("venger ta famille!",27,75,5)
+	print("tu es mort !",40,40,7)
+	print("reessaie si tu veux",25,55,5)
+	print("venger ta famille !",27,65,5)
+	print("appuie sur ❎", 38,80,6)
+	print("pour recommencer !", 27, 90, 6) 
 end
 
 function draw_win()
