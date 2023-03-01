@@ -278,7 +278,7 @@ function attack()
  	if t.hp <= 0 then
  	 t.x = -1
  	 t.is_attacking = false
- 	 p.armor_max = 5
+ 	 p.max_armor = 5
  	 p.armor = 5
  	 p.hp=p.max_hp
  	 music(33)
@@ -614,7 +614,7 @@ function deal_damage()
  	if p.armor>0 then 
  		p.armor-=1
  	else
- 		p.hp-=1
+ 		p.hp-=2
  	end
 		if p.hp<1 then
 			p.x=5
